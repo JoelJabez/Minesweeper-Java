@@ -1,0 +1,5 @@
+.gradle
+.idea
+**/task/build/**
+**/task/out/**
+**/*.yaml
