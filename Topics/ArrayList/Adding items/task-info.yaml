@@ -1,0 +1,25 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: "[a, d, c, b, f, e]"
+- text: "[d, c, a, b, f, e]"
+- text: "[e, b, c, d, a, f]"
+- text: "[a, b, d, c, f, e]"
+- text: "[a, d, c, b, e, f]"
+- text: "[d, c, a, b, e, f]"
+files:
+- name: src/Task.java
+  visible: true
+  text: |
+    // You can experiment here, it won’t be checked
+
+    public class Task {
+      public static void main(String[] args) {
+        // put your code here
+      }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/3484#comment
+status: Solved
+record: -1
+local_check: false

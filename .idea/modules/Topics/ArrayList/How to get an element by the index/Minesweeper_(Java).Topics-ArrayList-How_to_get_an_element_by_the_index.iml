@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":Topics-ArrayList-How_to_get_an_element_by_the_index" external.linked.project.path="$MODULE_DIR$/../../../../../Topics/ArrayList/How to get an element by the index" external.root.project.path="$MODULE_DIR$/../../../../.." external.system.id="GRADLE" external.system.module.group="Minesweeper (Java)" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../../Topics/ArrayList/How to get an element by the index">
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../Topics/ArrayList/How to get an element by the index/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../Topics/ArrayList/How to get an element by the index/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../Topics/ArrayList/How to get an element by the index/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

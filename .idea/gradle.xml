@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="false" />
+        <option name="distributionType" value="WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_INTERNAL" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/bin" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/classes/java" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/classes/java/bin" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/generated/sources/annotationProcessor/java" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/generated/sources/annotationProcessor/java/bin" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/generated/sources/headers/java" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/generated/sources/headers/java/bin" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/reports/tests" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/reports/tests/bin" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/test-results" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/test-results/bin" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/tmp" />
+            <option value="$PROJECT_DIR$/Minesweeper (Java)/task/build/tmp/bin" />
+            <option value="$PROJECT_DIR$/Topics/ArrayList/Adding items" />
+            <option value="$PROJECT_DIR$/Topics/ArrayList/Find the nearest number" />
+            <option value="$PROJECT_DIR$/Topics/ArrayList/How to get an element by the index" />
+            <option value="$PROJECT_DIR$/Topics/ArrayList/Output the list's elements" />
+            <option value="$PROJECT_DIR$/Topics/ArrayList/Theory" />
+            <option value="$PROJECT_DIR$/Topics/What are collections/Initialize a collection" />
+            <option value="$PROJECT_DIR$/Topics/What are collections/Resizable structure" />
+            <option value="$PROJECT_DIR$/Topics/What are collections/Theory" />
+            <option value="$PROJECT_DIR$/util" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

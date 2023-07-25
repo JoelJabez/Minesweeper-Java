@@ -1,5 +1,5 @@
-.gradle
-.idea
-**/task/build/**
-**/task/out/**
-**/*.yaml
+# .gradle
+# .idea
+# **/task/build/**
+# **/task/out/**
+# **/*.yaml
