@@ -1,24 +1,34 @@
 package minesweeper.game;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Minesweeper {
-    private final int SIZE = 9;
-    private final int RANGE = (int) Math.pow(SIZE, 2) + (SIZE - 1);
+    HashMap<Integer, List<Integer>> coordinates;
+    Scanner scanner;
+    private final int GRID;
+    private final char[][] BOARD;
 
     private int numberOfMines;
-    private char[][] board = new char[SIZE][SIZE];
+
+    {
+        scanner = new Scanner(System.in);
+        coordinates = new HashMap<>();
+
+        GRID = 9;
+        BOARD = new char[GRID][GRID];
+    }
 
     public void start() {
         getNumberOfMines();
-        newBoard();
+        generateNewBoard();
         printBoard();
+        getMarkMineInput();
+        printBoard();
+
+        scanner.close();
     }
 
     void getNumberOfMines() {
-        Scanner scanner = new Scanner(System.in);
-
         while (true) {
             try {
                 System.out.print("How may mines do you want on the field? ");
@@ -33,62 +43,119 @@ public class Minesweeper {
                 System.out.println("Please enter an integer");
             }
         }
-
-        scanner.close();
     }
 
-    void newBoard() {
+    void generateNewBoard() {
         Random random = new Random();
         do {
-            int number = random.nextInt(RANGE);
-            int xCoordinate = number / 10;
-            int yCoordinate = number % 10;
+            List<Integer> yCoordinates = new ArrayList<>();
+            int xCoordinate = random.nextInt(GRID);
+            int yCoordinate = random.nextInt(GRID);
 
-            if (xCoordinate == 9) {
-                xCoordinate--;
-            }
-            if (yCoordinate == 9) {
-                yCoordinate--;
-            }
-            if (board[xCoordinate][yCoordinate] != 'X') {
-                board[xCoordinate][yCoordinate] = 'X';
+            if (isNotOccupied(xCoordinate, yCoordinate)) {
+                coordinates.putIfAbsent(xCoordinate, yCoordinates);
+                coordinates.get(xCoordinate).add(yCoordinate);
+
                 numberOfMines--;
             }
         } while (numberOfMines != 0);
 
-        for (int horizontal = 0; horizontal < board.length; horizontal++) {
-            for (int vertical = 0; vertical < board.length; vertical++) {
-                if (board[horizontal][vertical] != 'X') {
-                    board[horizontal][vertical] = '.';
-                }
+        for (int horizontal = 0; horizontal < BOARD.length; horizontal++) {
+            for (int vertical = 0; vertical < BOARD.length; vertical++) {
+                BOARD[horizontal][vertical] = '.';
             }
         }
     }
 
-    void printBoard() {
+    private void printBoard() {
+        System.out.println();
         printTopGrid();
 
-        for (int horizontal = 0; horizontal < SIZE; horizontal++) {
+        for (int horizontal = 0; horizontal < GRID; horizontal++) {
             System.out.printf("%d|", horizontal + 1);
-            for (int vertical = 0; vertical < SIZE; vertical++) {
+            for (int vertical = 0; vertical < GRID; vertical++) {
                 int counter = 0;
-                if (board[horizontal][vertical] != 'X') {
+                if (isNotOccupied(horizontal, vertical)) {
                     counter = checkSurrounding(horizontal, vertical, counter);
                     if (counter != 0) {
-                        board[horizontal][vertical] = Character.forDigit(counter, 10);
+                        BOARD[horizontal][vertical] = Character.forDigit(counter, 10);
                     }
                 }
-                System.out.print(board[horizontal][vertical]);
+                System.out.print(BOARD[horizontal][vertical]);
             }
             System.out.println("|");
         }
 
         printBottomGrid();
+        System.out.println();
+
+        for (Map.Entry<Integer, List<Integer>> entry : coordinates.entrySet()) {
+            Integer key = entry.getKey();
+            List<Integer> value = entry.getValue();
+
+            for (Integer integer : value) {
+                System.out.println(key + " -> " + integer);
+            }
+        }
+    }
+
+    void getMarkMineInput() {
+        int xCoordinate;
+        int yCoordinate;
+
+        while (true) {
+            try {
+                System.out.print("Set/delete mine marks (x and y coordinates): ");
+                String coordinates = scanner.nextLine();
+
+                xCoordinate = Integer.parseInt(coordinates.split(" ")[0]);
+                yCoordinate = Integer.parseInt(coordinates.split(" ")[1]);
+
+                xCoordinate--;
+                yCoordinate--;
+
+                if (isEmpty(xCoordinate, yCoordinate)){
+                    break;
+                }
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please input a number");
+            } catch (ArrayIndexOutOfBoundsException aiooe) {
+                System.out.println("Please enter two positive coordinates");
+            }
+        }
+    }
+
+    private boolean isEmpty(int xCoordinate, int yCoordinate) {
+        if (isNotInRange(xCoordinate, true)) {
+            return false;
+        }
+        if (isNotInRange(yCoordinate, false)) {
+            return false;
+        }
+        if (Character.isDigit(BOARD[xCoordinate][yCoordinate])) {
+            System.out.println("There is a number here!");
+            return false;
+        }
+
+        BOARD[xCoordinate][yCoordinate] = '*';
+        return true;
+    }
+
+    private boolean isNotInRange(int coordinate, boolean isX) {
+        if (-1 > coordinate || coordinate > GRID) {
+            if (isX) {
+                System.out.println("Please enter the X coordinates in the range of " + GRID);
+            } else {
+                System.out.println("Please enter the Y coordinates in the range of " + GRID);
+            }
+            return true;
+        }
+        return false;
     }
 
     private void printTopGrid() {
         System.out.print(" |");
-        for (int i = 1; i <= SIZE; i++) {
+        for (int i = 1; i <= GRID; i++) {
             System.out.print(i);
         }
         System.out.println("|");
@@ -98,7 +165,7 @@ public class Minesweeper {
 
     private void printBottomGrid() {
         System.out.print("-|");
-        for (int i = 1; i <= SIZE; i++) {
+        for (int i = 1; i <= GRID; i++) {
             System.out.print("-");
         }
         System.out.println("|");
@@ -106,14 +173,29 @@ public class Minesweeper {
 
     int checkSurrounding(int horizontal, int vertical, int counter) {
         for (int i = horizontal - 1; i <= horizontal + 1; i++) {
-            if (0 <= i && i < SIZE) {
+            if (0 <= i && i < GRID) {
                 for (int j = vertical - 1; j <= vertical + 1; j++) {
-                    if ((0 <= j && j < SIZE) && board[i][j] == 'X') {
-                        counter++;
+                    if (horizontal == i && vertical == j) {
+                        continue;
+                    }
+
+                    if (0 <= j && j < GRID) {
+                        if (coordinates.containsKey(i)) {
+                            if (coordinates.get(i).contains(j)) {
+                                counter++;
+                            }
+                        }
                     }
                 }
             }
         }
         return counter;
+    }
+
+    private boolean isNotOccupied(int xCoordinate, int yCoordinate) {
+        if (coordinates.containsKey(xCoordinate)) {
+            return !coordinates.get(xCoordinate).contains(yCoordinate);
+        }
+        return true;
     }
 }
