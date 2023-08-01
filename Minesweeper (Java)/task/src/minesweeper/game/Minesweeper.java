@@ -3,43 +3,50 @@ package minesweeper.game;
 import java.util.*;
 
 public class Minesweeper {
-    char[][] BOARD;
-    final int GRID;
-    private final int X_COORDINATE_INDEX;
-    private final int Y_COORDINATE_INDEX;
-    private final char BOARD_SYMBOL_UNDISCOVERED;
-    private final char BOARD_SYMBOL_FLAG;
-    private int NUMBER_OF_MINES;
+    static final int GRID;
+    private static final int X_COORDINATE_INDEX;
+    private static final int Y_COORDINATE_INDEX;
+    private static final char BOARD_SYMBOL_UNDISCOVERED;
+    private static final char BOARD_SYMBOL_DISCOVERED;
+    private static final char BOARD_SYMBOL_FLAG;
 
     HashMap<Integer, List<Integer>> coordinates;
-    int numberOfFlagsPlaced;
-    int correctlyPlacedMines;
+    private int correctlyPlacedMines;
+    private int numberOfFlagsPlaced;
+    private int numberOfMines;
+    char[][] BOARD;
 
-    {
+    static {
         GRID = 9;
-        BOARD = new char[GRID][GRID];
         X_COORDINATE_INDEX = 0;
         Y_COORDINATE_INDEX = 1;
         BOARD_SYMBOL_UNDISCOVERED = '.';
+        BOARD_SYMBOL_DISCOVERED = '/';
         BOARD_SYMBOL_FLAG = '*';
+    }
+
+    {
+        BOARD = new char[GRID][GRID];
 
         coordinates = new HashMap<>();
         numberOfFlagsPlaced = 0;
     }
 
     private void setNumberOfMines(int numberOfMines) {
-        NUMBER_OF_MINES = numberOfMines;
+        this.numberOfMines = numberOfMines;
     }
 
     public void generateNewBoard(int numberOfMines) {
+        for (int i = 0; i < GRID; i++) {
+            Arrays.fill(BOARD[i], BOARD_SYMBOL_UNDISCOVERED);
+        }
         setNumberOfMines(numberOfMines);
         placeMines();
-        placeCounterOfSurroundingMines();
     }
 
     private void placeMines() {
         Random random = new Random();
-        int tempNumberOfMines = NUMBER_OF_MINES;
+        int tempNumberOfMines = numberOfMines;
 
         do {
             List<Integer> xCoordinates = new ArrayList<>();
@@ -64,9 +71,6 @@ public class Minesweeper {
                     if (counter != 0) {
                         BOARD[horizontal][vertical] = Character.forDigit(counter, 10);
                     }
-                }
-                if (counter == 0) {
-                    BOARD[horizontal][vertical] = '.';
                 }
             }
         }
@@ -134,24 +138,33 @@ public class Minesweeper {
     // did unit test for this already
     public boolean setCoordinates(String coordinates) {
         int yCoordinate = MinesweeperUtils.getCoordinate(coordinates, Y_COORDINATE_INDEX);
-        if (validateCoordinate(yCoordinate, false)) {
+        if (isXCoordinateNotValid(yCoordinate)) {
             return false;
         }
 
         int xCoordinate = MinesweeperUtils.getCoordinate(coordinates, X_COORDINATE_INDEX);
-        if (validateCoordinate(xCoordinate, true)) {
+        if (isYCoordinateNotValid(xCoordinate)) {
             return false;
         }
 
-        if (isNotANeighbouringMine(yCoordinate, xCoordinate)) {
-            if (BOARD[yCoordinate][xCoordinate] == BOARD_SYMBOL_UNDISCOVERED) {
-                addFlag(yCoordinate, xCoordinate);
-            } else {
-                removeFlag(yCoordinate, xCoordinate);
-            }
-            return true;
+        String action;
+        if (coordinates.length() != 3) {
+            System.out.println("Please provide two coordinates and an action");
+            return false;
         }
-        return false;
+        action = coordinates.split(coordinates)[2];
+        switch (action) {
+            case "free" -> {
+                return true;
+            }
+            case "mine" -> {
+                return isFlagPlaced(yCoordinate, xCoordinate);
+            }
+            default -> {
+                System.out.println("Please enter two coordinates and an action(either free or mine)");
+                return false;
+            }
+        }
     }
 
     public boolean isNotANeighbouringMine(int yCoordinate, int xCoordinate) {
@@ -173,8 +186,7 @@ public class Minesweeper {
             }
         }
 
-
-        return !(correctlyPlacedMines == numberOfFlagsPlaced && correctlyPlacedMines == NUMBER_OF_MINES);
+        return !(correctlyPlacedMines == numberOfFlagsPlaced && correctlyPlacedMines == numberOfMines);
     }
 
     // Unit test this already
@@ -199,7 +211,23 @@ public class Minesweeper {
     }
 
     // Unit test this already
-    boolean validateCoordinate(int coordinate, boolean isX) {
-        return coordinate == (int) Double.NEGATIVE_INFINITY || isNotInRange(coordinate, isX);
+    boolean isXCoordinateNotValid(int coordinate) {
+        return coordinate == (int) Double.NEGATIVE_INFINITY || isNotInRange(coordinate, true);
+    }
+
+    boolean isYCoordinateNotValid(int coordinate) {
+        return coordinate == (int) Double.NEGATIVE_INFINITY || isNotInRange(coordinate, false);
+    }
+
+    boolean isFlagPlaced(int yCoordinate, int xCoordinate) {
+        if (isNotANeighbouringMine(yCoordinate, xCoordinate)) {
+            if (BOARD[yCoordinate][xCoordinate] == BOARD_SYMBOL_UNDISCOVERED) {
+                addFlag(yCoordinate, xCoordinate);
+            } else {
+                removeFlag(yCoordinate, xCoordinate);
+            }
+            return true;
+        }
+        return false;
     }
 }

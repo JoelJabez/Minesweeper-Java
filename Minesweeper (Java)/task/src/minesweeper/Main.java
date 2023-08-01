@@ -44,7 +44,7 @@ public class Main {
     static void setFlagMineFromUser(Minesweeper minesweeper, Scanner scanner) {
         boolean isCoordinateNotSet = true;
         do {
-            System.out.print("Set/delete mine marks (x and y coordinates): ");
+            System.out.print("Set/unset mines marks or claim as free: ");
             String coordinates = scanner.nextLine();
             isCoordinateNotSet = !minesweeper.setCoordinates(coordinates);
         } while (isCoordinateNotSet);

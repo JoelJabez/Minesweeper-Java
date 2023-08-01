@@ -80,13 +80,22 @@ public class MinesweeperTest extends TestCase {
         assertFalse(minesweeper.setCoordinates("1"));
     }
 
-    public void testValidateCoordinate() {
-        assertTrue(minesweeper.validateCoordinate(-1, false));
-        assertTrue(minesweeper.validateCoordinate(9, true));
-        assertTrue(minesweeper.validateCoordinate((int) Double.NEGATIVE_INFINITY, false));
+    public void testIsXCoordinateNotValid() {
+        assertTrue(minesweeper.isXCoordinateNotValid(-1));
+        assertTrue(minesweeper.isXCoordinateNotValid(9));
+        assertTrue(minesweeper.isXCoordinateNotValid((int) Double.NEGATIVE_INFINITY));
 
-        assertFalse(minesweeper.validateCoordinate(0, true));
-        assertFalse(minesweeper.validateCoordinate(8, false));
+        assertFalse(minesweeper.isXCoordinateNotValid(0));
+        assertFalse(minesweeper.isXCoordinateNotValid(8));
+    }
+
+    public void testIsYCoordinateNotValid() {
+        assertTrue(minesweeper.isYCoordinateNotValid(-1));
+        assertTrue(minesweeper.isYCoordinateNotValid(9));
+        assertTrue(minesweeper.isYCoordinateNotValid((int) Double.NEGATIVE_INFINITY));
+
+        assertFalse(minesweeper.isYCoordinateNotValid(0));
+        assertFalse(minesweeper.isYCoordinateNotValid(8));
     }
 
     public void testIsNotMarked() {
@@ -96,8 +105,8 @@ public class MinesweeperTest extends TestCase {
     }
 
     void printBoard() {
-        for (int i = 0; i < minesweeper.GRID; i++) {
-            for (int j = 0; j < minesweeper.GRID; j++) {
+        for (int i = 0; i < Minesweeper.GRID; i++) {
+            for (int j = 0; j < Minesweeper.GRID; j++) {
                 System.out.print(minesweeper.BOARD[i][j]);
             }
             System.out.println();
