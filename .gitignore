@@ -1,7 +1,9 @@
 /*
 /*/
+!/bin.gradle
+!/build.gradle
+!/settings.gradle
 !/gradle/wrapper/gradle-wrapper.properties
 !/gradle/wrapper/gradle-wrapper.jar
-!/bin.gradle
 !/**/task/src
 !/**/task/test
