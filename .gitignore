@@ -5,5 +5,5 @@
 !/settings.gradle
 !/gradle/wrapper/gradle-wrapper.properties
 !/gradle/wrapper/gradle-wrapper.jar
-!/**/task/src
-!/**/task/test
+!/**/task/src/
+!/**/task/test/
