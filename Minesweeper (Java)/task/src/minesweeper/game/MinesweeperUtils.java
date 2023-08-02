@@ -12,7 +12,7 @@ public class MinesweeperUtils {
 
     public static int getCoordinate(String coordinates, int index) {
         String[] coordinatesInString = coordinates.split(" ");
-        if (coordinatesInString.length != 2) {
+        if (coordinatesInString.length != 3) {
             System.out.println("Please enter two coordinates");
             return (int) Double.NEGATIVE_INFINITY;
         }

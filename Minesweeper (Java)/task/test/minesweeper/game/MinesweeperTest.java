@@ -29,7 +29,7 @@ public class MinesweeperTest extends TestCase {
             int xCoordinate = i;
             int yCoordinate = i;
 
-            if (minesweeper.isNotMarked(yCoordinate, xCoordinate)) {
+            if (minesweeper.isMineMarked(yCoordinate, xCoordinate)) {
                 minesweeper.coordinates.putIfAbsent(xCoordinate, yCoordinates);
                 minesweeper.coordinates.get(xCoordinate).add(yCoordinate);
 
@@ -101,7 +101,7 @@ public class MinesweeperTest extends TestCase {
     public void testIsNotMarked() {
         generateBoard();
         printBoard();
-        assertTrue(minesweeper.isNotMarked(1, 0));
+        assertTrue(minesweeper.isMineMarked(1, 0));
     }
 
     void printBoard() {
