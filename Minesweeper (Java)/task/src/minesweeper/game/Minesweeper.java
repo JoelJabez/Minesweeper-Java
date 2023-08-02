@@ -138,23 +138,24 @@ public class Minesweeper {
     }
 
     // did unit test for this already
-    public boolean setCoordinates(String coordinates) {
+    public boolean isCoordinatesSet(String coordinates) {
         if (coordinates.split(" ").length != 3) {
             System.out.println("Please provide two coordinates and an action");
             return false;
         }
 
         int yCoordinate = MinesweeperUtils.getCoordinate(coordinates, Y_COORDINATE_INDEX);
-        if (isXCoordinateNotValid(yCoordinate)) {
+        if (isYCoordinateNotValid(yCoordinate)) {
             return false;
         }
 
         int xCoordinate = MinesweeperUtils.getCoordinate(coordinates, X_COORDINATE_INDEX);
-        if (isYCoordinateNotValid(xCoordinate)) {
+        if (isXCoordinateNotValid(xCoordinate)) {
             return false;
         }
 
         String action = coordinates.split(" ")[2];
+        System.out.println("Line number 158");
         switch (action) {
             case "free" -> {
                 return isFloodFilled(yCoordinate, xCoordinate);
@@ -205,15 +206,15 @@ public class Minesweeper {
 
     // Unit test this already
     boolean isNotInRange(int coordinate, boolean isX) {
-        if (isNotInRange(coordinate)) {
+        if (0 > coordinate || coordinate > GRID) {
             if (isX) {
                 System.out.println("Please enter the X coordinates in the range of " + GRID);
             } else {
                 System.out.println("Please enter the Y coordinates in the range of " + GRID);
             }
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Unit test this already
@@ -242,6 +243,7 @@ public class Minesweeper {
 
         if (isMineMarked(yCoordinate, xCoordinate)) {
             // reveal all the mines here
+            System.out.println("Line number 245");
             return false;
         }
 
@@ -279,9 +281,10 @@ public class Minesweeper {
     }
 
     boolean isValid(int yPosition, int xPosition) {
-        if (isNotInRange(yPosition) || isNotInRange(xPosition)
+        if (0 > yPosition || yPosition >= GRID || 0 > xPosition || xPosition >= GRID
                 || BOARD[yPosition][xPosition] == BOARD_SYMBOL_DISCOVERED
-                || isDigit(yPosition, xPosition) || isMineMarked(yPosition, xPosition)) {
+                || Character.isDigit(BOARD[yPosition][xPosition]) || isMineMarked(yPosition, xPosition)) {
+            System.out.println("Line number 285");
             return false;
         }
         return true;

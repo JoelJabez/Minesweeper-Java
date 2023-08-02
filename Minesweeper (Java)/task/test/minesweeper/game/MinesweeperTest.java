@@ -63,21 +63,21 @@ public class MinesweeperTest extends TestCase {
         assertFalse(minesweeper.isNotInRange(8, false));
     }
 
-    public void testSetCoordinate() {
+    public void testIsCoordinatesSet() {
         generateBoard();
-        assertTrue(minesweeper.setCoordinates("1 1"));
+        assertFalse(minesweeper.isCoordinatesSet("1 1"));
 
-        assertFalse(minesweeper.setCoordinates("1 2"));
-        assertFalse(minesweeper.setCoordinates("9 9"));
+        assertFalse(minesweeper.isCoordinatesSet("1 2"));
+        assertFalse(minesweeper.isCoordinatesSet("9 9"));
 
-        assertFalse(minesweeper.setCoordinates("-1 2"));
-        assertFalse(minesweeper.setCoordinates("2 10"));
-        assertFalse(minesweeper.setCoordinates("foo"));
-        assertFalse(minesweeper.setCoordinates("1 "));
-        assertFalse(minesweeper.setCoordinates("foo bar"));
-        assertFalse(minesweeper.setCoordinates("1 foo"));
-        assertFalse(minesweeper.setCoordinates("foo 1"));
-        assertFalse(minesweeper.setCoordinates("1"));
+        assertFalse(minesweeper.isCoordinatesSet("-1 2"));
+        assertFalse(minesweeper.isCoordinatesSet("2 10"));
+        assertFalse(minesweeper.isCoordinatesSet("foo"));
+        assertFalse(minesweeper.isCoordinatesSet("1 "));
+        assertFalse(minesweeper.isCoordinatesSet("foo bar"));
+        assertFalse(minesweeper.isCoordinatesSet("1 foo"));
+        assertFalse(minesweeper.isCoordinatesSet("foo 1"));
+        assertFalse(minesweeper.isCoordinatesSet("1"));
     }
 
     public void testIsXCoordinateNotValid() {

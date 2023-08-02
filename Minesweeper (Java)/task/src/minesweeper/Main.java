@@ -46,7 +46,7 @@ public class Main {
         do {
             System.out.print("Set/unset mines marks or claim as free: ");
             String coordinates = scanner.nextLine();
-            isCoordinateNotSet = !minesweeper.setCoordinates(coordinates);
+            isCoordinateNotSet = !minesweeper.isCoordinatesSet(coordinates);
         } while (isCoordinateNotSet);
     }
 }
