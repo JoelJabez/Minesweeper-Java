@@ -81,12 +81,12 @@ public class MinesweeperTest extends TestCase {
     }
 
     public void testIsXCoordinateNotValid() {
-        assertTrue(minesweeper.isXCoordinateNotValid(-1));
-        assertTrue(minesweeper.isXCoordinateNotValid(9));
-        assertTrue(minesweeper.isXCoordinateNotValid((int) Double.NEGATIVE_INFINITY));
+        assertTrue(minesweeper.isXCoordinateValid(-1));
+        assertTrue(minesweeper.isXCoordinateValid(9));
+        assertTrue(minesweeper.isXCoordinateValid((int) Double.NEGATIVE_INFINITY));
 
-        assertFalse(minesweeper.isXCoordinateNotValid(0));
-        assertFalse(minesweeper.isXCoordinateNotValid(8));
+        assertFalse(minesweeper.isXCoordinateValid(0));
+        assertFalse(minesweeper.isXCoordinateValid(8));
     }
 
     public void testIsYCoordinateNotValid() {
@@ -102,6 +102,12 @@ public class MinesweeperTest extends TestCase {
         generateBoard();
         printBoard();
         assertTrue(minesweeper.isMineMarked(1, 0));
+    }
+
+    public void testIsArgumentsEqualToThree() {
+        assertTrue(minesweeper.isArgumentsEqualToThree("1 2 foo"));
+
+        assertTrue(minesweeper.isArgumentsEqualToThree("1 2   foo"));
     }
 
     void printBoard() {

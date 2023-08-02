@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.*;
 
 public class Minesweeper {
-    static final int GRID;
+    public static final int GRID;
     private static final int X_COORDINATE_INDEX;
     private static final int Y_COORDINATE_INDEX;
     private static final char BOARD_SYMBOL_UNDISCOVERED;
@@ -139,7 +139,7 @@ public class Minesweeper {
 
     // did unit test for this already
     public boolean isCoordinatesSet(String coordinates) {
-        if (coordinates.split(" ").length != 3) {
+        if (!isArgumentsEqualToThree(coordinates)) {
             System.out.println("Please provide two coordinates and an action");
             return false;
         }
@@ -150,12 +150,11 @@ public class Minesweeper {
         }
 
         int xCoordinate = MinesweeperUtils.getCoordinate(coordinates, X_COORDINATE_INDEX);
-        if (isXCoordinateNotValid(xCoordinate)) {
+        if (isXCoordinateValid(xCoordinate)) {
             return false;
         }
 
-        String action = coordinates.split(" ")[2];
-        System.out.println("Line number 158");
+        String action = coordinates.split(" ")[2].toLowerCase();
         switch (action) {
             case "free" -> {
                 return isFloodFilled(yCoordinate, xCoordinate);
@@ -218,8 +217,8 @@ public class Minesweeper {
     }
 
     // Unit test this already
-    boolean isXCoordinateNotValid(int coordinate) {
-        return coordinate == (int) Double.NEGATIVE_INFINITY || isNotInRange(coordinate, true);
+    boolean isXCoordinateValid(int coordinate) {
+        return coordinate != (int) Double.NEGATIVE_INFINITY && isNotInRange(coordinate, true);
     }
 
     boolean isYCoordinateNotValid(int coordinate) {
@@ -302,5 +301,9 @@ public class Minesweeper {
             BOARD[yCoordinate][xCoordinate] = BOARD_SYMBOL_DISCOVERED;
             coordinates.push(new Point(xCoordinate, yCoordinate));
         }
+    }
+
+    public boolean isArgumentsEqualToThree(String input) {
+        return input.split("\\s+").length == 3;
     }
 }

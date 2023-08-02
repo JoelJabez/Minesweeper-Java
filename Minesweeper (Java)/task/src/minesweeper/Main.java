@@ -35,7 +35,7 @@ public class Main {
             String mines = scanner.nextLine();
             numberOfMines = MinesweeperUtils.getIntegerFromUserInput(mines);
 
-            if (numberOfMines > 0) {
+            if (MinesweeperUtils.isInRange(numberOfMines, Minesweeper.GRID)) {
                 return numberOfMines;
             }
         }

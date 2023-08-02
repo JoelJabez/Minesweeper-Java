@@ -26,5 +26,31 @@ public class MinesweeperUtilsTest extends TestCase{
         assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1 foo", 1));
         assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1", 1));
     }
+
+    public void testIsGreaterThanZero() {
+        assertTrue(MinesweeperUtils.isGreaterThanZero(1));
+
+        assertFalse(MinesweeperUtils.isGreaterThanZero(-1));
+        assertFalse(MinesweeperUtils.isGreaterThanZero(0));
+    }
+
+    public void testIsInRange() {
+        assertTrue(MinesweeperUtils.isInRange(2, 9));
+
+        assertFalse(MinesweeperUtils.isInRange(82, 9));
+        assertTrue(MinesweeperUtils.isInRange(82, 10));
+    }
+
+    public void testIsCoordinateInRange() {
+        assertTrue(MinesweeperUtils.isCoordinateInRange(0, 9));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(8, 9));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(0, 10));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(9, 10));
+
+        assertFalse(MinesweeperUtils.isCoordinateInRange(-1, 9));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(9, 9));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(-1, 10));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(10, 10));
+    }
 }
 
