@@ -54,15 +54,6 @@ public class MinesweeperTest extends TestCase {
         assertNotEquals(wrongNumber, counter);
     }
 
-    public void testIsNotInRange() {
-        assertTrue(minesweeper.isNotInRange(-1, true));
-        assertTrue(minesweeper.isNotInRange(9, true));
-
-        assertFalse(minesweeper.isNotInRange(0, false));
-        assertFalse(minesweeper.isNotInRange(4, true));
-        assertFalse(minesweeper.isNotInRange(8, false));
-    }
-
     public void testIsCoordinatesSet() {
         generateBoard();
         assertFalse(minesweeper.isCoordinatesSet("1 1"));
@@ -80,42 +71,9 @@ public class MinesweeperTest extends TestCase {
         assertFalse(minesweeper.isCoordinatesSet("1"));
     }
 
-    public void testIsXCoordinateNotValid() {
-        assertTrue(minesweeper.isXCoordinateValid(-1));
-        assertTrue(minesweeper.isXCoordinateValid(9));
-        assertTrue(minesweeper.isXCoordinateValid((int) Double.NEGATIVE_INFINITY));
-
-        assertFalse(minesweeper.isXCoordinateValid(0));
-        assertFalse(minesweeper.isXCoordinateValid(8));
-    }
-
-    public void testIsYCoordinateNotValid() {
-        assertTrue(minesweeper.isYCoordinateNotValid(-1));
-        assertTrue(minesweeper.isYCoordinateNotValid(9));
-        assertTrue(minesweeper.isYCoordinateNotValid((int) Double.NEGATIVE_INFINITY));
-
-        assertFalse(minesweeper.isYCoordinateNotValid(0));
-        assertFalse(minesweeper.isYCoordinateNotValid(8));
-    }
-
     public void testIsNotMarked() {
         generateBoard();
-        printBoard();
         assertTrue(minesweeper.isMineMarked(1, 0));
     }
 
-    public void testIsArgumentsEqualToThree() {
-        assertTrue(minesweeper.isArgumentsEqualToThree("1 2 foo"));
-
-        assertTrue(minesweeper.isArgumentsEqualToThree("1 2   foo"));
-    }
-
-    void printBoard() {
-        for (int i = 0; i < Minesweeper.GRID; i++) {
-            for (int j = 0; j < Minesweeper.GRID; j++) {
-                System.out.print(minesweeper.BOARD[i][j]);
-            }
-            System.out.println();
-        }
-    }
 }

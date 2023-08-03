@@ -14,43 +14,54 @@ public class MinesweeperUtilsTest extends TestCase{
     }
 
     public void testGetCoordinate() {
-        assertEquals(0, MinesweeperUtils.getCoordinate("1 2", 0));
-        assertEquals(1, MinesweeperUtils.getCoordinate("3 2", 1));
+        assertEquals(0, MinesweeperUtils.getCoordinate("1"));
+        assertEquals(-2, MinesweeperUtils.getCoordinate("-1"));
+        assertEquals(9, MinesweeperUtils.getCoordinate("10"));
 
-        assertEquals(1, MinesweeperUtils.getCoordinate("-1 2", 1));
-        assertEquals(0, MinesweeperUtils.getCoordinate("foo 1", 1));
-        assertEquals(9, MinesweeperUtils.getCoordinate("2 10", 1));
-        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("foo", 0));
-        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1 ", 0));
-        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("foo bar", 1));
-        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1 foo", 1));
-        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1", 1));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1 2"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("3 2"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("-1 2"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("foo 1"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("2 10"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("foo"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1 "));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("foo bar"));
+        assertEquals(NEGATIVE_INFINITY, MinesweeperUtils.getCoordinate("1 foo"));
     }
 
-    public void testIsGreaterThanZero() {
-        assertTrue(MinesweeperUtils.isGreaterThanZero(1));
+    public void testIsNumberOfMinesInRange() {
+        assertTrue(MinesweeperUtils.isNumberOfMinesInRange(1));
+        assertTrue(MinesweeperUtils.isNumberOfMinesInRange(40));
+        assertTrue(MinesweeperUtils.isNumberOfMinesInRange(81));
 
-        assertFalse(MinesweeperUtils.isGreaterThanZero(-1));
-        assertFalse(MinesweeperUtils.isGreaterThanZero(0));
-    }
-
-    public void testIsInRange() {
-        assertTrue(MinesweeperUtils.isInRange(2, 9));
-
-        assertFalse(MinesweeperUtils.isInRange(82, 9));
-        assertTrue(MinesweeperUtils.isInRange(82, 10));
+        assertFalse(MinesweeperUtils.isNumberOfMinesInRange(0));
+        assertFalse(MinesweeperUtils.isNumberOfMinesInRange(-1));
+        assertFalse(MinesweeperUtils.isNumberOfMinesInRange(82));
     }
 
     public void testIsCoordinateInRange() {
-        assertTrue(MinesweeperUtils.isCoordinateInRange(0, 9));
-        assertTrue(MinesweeperUtils.isCoordinateInRange(8, 9));
-        assertTrue(MinesweeperUtils.isCoordinateInRange(0, 10));
-        assertTrue(MinesweeperUtils.isCoordinateInRange(9, 10));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(0));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(4));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(8));
 
-        assertFalse(MinesweeperUtils.isCoordinateInRange(-1, 9));
-        assertFalse(MinesweeperUtils.isCoordinateInRange(9, 9));
-        assertFalse(MinesweeperUtils.isCoordinateInRange(-1, 10));
-        assertFalse(MinesweeperUtils.isCoordinateInRange(10, 10));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(-1));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(9));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(10));
+    }
+
+    public void testIsInRange() {
+        assertFalse(MinesweeperUtils.isInRange(0));
+        assertFalse(MinesweeperUtils.isInRange(4));
+        assertFalse(MinesweeperUtils.isInRange(8));
+
+        assertTrue(MinesweeperUtils.isInRange(-1));
+        assertTrue(MinesweeperUtils.isInRange(9));
+    }
+
+    public void testIsArgumentsEqualToThree() {
+        assertTrue(MinesweeperUtils.isArgumentsEqualToThree("   1    2    3"));
+
+        assertFalse(MinesweeperUtils.isArgumentsEqualToThree("1    2   "));
     }
 }
 

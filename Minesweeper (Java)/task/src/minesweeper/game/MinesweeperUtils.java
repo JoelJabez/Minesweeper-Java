@@ -1,6 +1,11 @@
 package minesweeper.game;
 
 public class MinesweeperUtils {
+    private final static int GRID_SIZE = MinesweeperHelpers.GRID_SIZE;
+
+    private MinesweeperUtils() {
+    }
+
     public static int getIntegerFromUserInput(String userInput) {
         try {
             return Integer.parseInt(userInput);
@@ -10,24 +15,31 @@ public class MinesweeperUtils {
         }
     }
 
-    public static int getCoordinate(String coordinates, int index) {
-        String[] coordinatesInString = coordinates.split(" ");
-        int number = getIntegerFromUserInput(coordinatesInString[index]);
+    public static int getCoordinate(String coordinate) {
+        int number = getIntegerFromUserInput(coordinate);
         if (number == (int) Double.NEGATIVE_INFINITY) {
             return number;
         }
         return number - 1;
     }
 
-    public static boolean isGreaterThanZero(int numberOfMines) {
-        return numberOfMines > 0;
+    public static boolean isNumberOfMinesInRange(int numberOfMines) {
+        return numberOfMines > 0 && numberOfMines <= Math.pow(GRID_SIZE, 2);
     }
 
-    public static boolean isInRange(int numberOfMines, int gridSize) {
-        return numberOfMines > 0 && numberOfMines <= Math.pow(gridSize, 2);
+    static boolean isCoordinateInRange(int coordinate) {
+        return coordinate >= 0 && coordinate < GRID_SIZE;
     }
 
-    static boolean isCoordinateInRange(int coordinate, int gridSize) {
-        return coordinate >= 0 && coordinate < gridSize;
+    static boolean isInRange(int coordinate) {
+        return coordinate < 0 || coordinate >= GRID_SIZE;
+    }
+
+    public static boolean isArgumentsEqualToThree(String input) {
+        return MinesweeperHelpers.splitArguments(input).length == 3;
+    }
+
+    static boolean isDigit(char[][] board, int yCoordinate, int xCoordinate) {
+        return Character.isDigit(board[yCoordinate][xCoordinate]);
     }
 }

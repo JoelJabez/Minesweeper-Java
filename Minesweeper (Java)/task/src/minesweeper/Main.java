@@ -6,7 +6,6 @@ import minesweeper.game.Minesweeper;
 import minesweeper.game.MinesweeperUtils;
 
 public class Main {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Minesweeper minesweeper = new Minesweeper();
@@ -30,15 +29,15 @@ public class Main {
 
     static int getNumberOfMines(Scanner scanner) {
         int numberOfMines;
-        while (true) {
+        do {
             System.out.print("How many mines do you want on the field? ");
             String mines = scanner.nextLine();
             numberOfMines = MinesweeperUtils.getIntegerFromUserInput(mines);
 
-            if (MinesweeperUtils.isInRange(numberOfMines, Minesweeper.GRID)) {
+            if (MinesweeperUtils.isNumberOfMinesInRange(numberOfMines)) {
                 return numberOfMines;
             }
-        }
+        } while (true);
     }
 
     static void setFlagMineFromUser(Minesweeper minesweeper, Scanner scanner) {
