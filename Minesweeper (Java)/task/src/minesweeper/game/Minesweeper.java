@@ -11,36 +11,42 @@ public class Minesweeper {
     private static final char BOARD_SYMBOL_UNDISCOVERED;
     private static final char BOARD_SYMBOL_DISCOVERED;
     private static final char BOARD_SYMBOL_FLAG;
+    private static final char BOARD_SYMBOL_MINE;
 
     HashMap<Integer, List<Integer>> coordinates;
     private int correctlyPlacedMines;
+    private int numberOfUndiscoveredIndex;
     private int numberOfFlagsPlaced;
     private int numberOfMines;
+    private boolean isPlayerWon;
     char[][] board;
+    int foo;
 
     static {
-        GRID = MinesweeperHelpers.GRID_SIZE;
+        GRID = MinesweeperUtils.GRID_SIZE;
         X_COORDINATE_INDEX = 0;
         Y_COORDINATE_INDEX = 1;
         ACTION_COORDINATE_INDEX = 2;
         BOARD_SYMBOL_UNDISCOVERED = '.';
         BOARD_SYMBOL_DISCOVERED = '/';
         BOARD_SYMBOL_FLAG = '*';
+        BOARD_SYMBOL_MINE = 'X';
     }
 
     {
+        isPlayerWon = true;
         board = new char[GRID][GRID];
 
         coordinates = new HashMap<>();
         numberOfFlagsPlaced = 0;
+        numberOfUndiscoveredIndex = 0;
     }
 
-    // not this
     private void setNumberOfMines(int numberOfMines) {
+        foo = GRID;
         this.numberOfMines = numberOfMines;
     }
 
-    // not this
     public void printBoard() {
         System.out.println();
         printTopGrid();
@@ -56,7 +62,32 @@ public class Minesweeper {
         printBottomGrid();
     }
 
-    // not this
+    public void printMessage() {
+        if (isPlayerWon) {
+            printBoard();
+            System.out.println("Congratulations! You found all the mines!");
+        } else {
+            System.out.println("You stepped on a mine and failed!");
+        }
+    }
+
+    public void generateNewBoard(int numberOfMines) {
+        for (int i = 0; i < GRID; i++) {
+            Arrays.fill(board[i], BOARD_SYMBOL_UNDISCOVERED);
+        }
+        setNumberOfMines(numberOfMines);
+        placeMines();
+    }
+
+    void openGrid(Deque<Point> coordinates, int yCoordinate, int xCoordinate) {
+        if (!isNumberOfSurroundingMinesSet(yCoordinate, xCoordinate)) {
+            board[yCoordinate][xCoordinate] = BOARD_SYMBOL_DISCOVERED;
+            coordinates.push(new Point(xCoordinate, yCoordinate));
+        } else {
+            isNumberOfSurroundingMinesSet(yCoordinate, xCoordinate);
+        }
+    }
+
     private void printTopGrid() {
         System.out.print(" |");
         for (int i = 1; i <= GRID; i++) {
@@ -67,7 +98,6 @@ public class Minesweeper {
         printBottomGrid();
     }
 
-    // not this
     private void printBottomGrid() {
         System.out.print("-|");
         for (int i = 1; i <= GRID; i++) {
@@ -76,16 +106,6 @@ public class Minesweeper {
         System.out.println("|");
     }
 
-    // did unit test for this already
-    public void generateNewBoard(int numberOfMines) {
-        for (int i = 0; i < GRID; i++) {
-            Arrays.fill(board[i], BOARD_SYMBOL_UNDISCOVERED);
-        }
-        setNumberOfMines(numberOfMines);
-        placeMines();
-    }
-
-    // not this
     private void placeMines() {
         Random random = new Random();
         int tempNumberOfMines = numberOfMines;
@@ -104,33 +124,19 @@ public class Minesweeper {
         } while (tempNumberOfMines != 0);
     }
 
-    // not this
-    void placeCounterOfSurroundingMines() {
-        for (int horizontal = 0; horizontal < GRID; horizontal++) {
-            for (int vertical = 0; vertical < GRID; vertical++) {
-                if (!isMineMarked(horizontal, vertical)) {
-                    isNumberOfSurroundingMinesSet(horizontal, vertical);
-                }
+    private void revealAllMines() {
+        coordinates.forEach((key, value) -> {
+            for (Integer integer : value) {
+                board[key][integer] = BOARD_SYMBOL_MINE;
             }
-        }
+        });
     }
 
-    void openGrid(Deque<Point> coordinates, int yCoordinate, int xCoordinate) {
-        if (!isNumberOfSurroundingMinesSet(yCoordinate, xCoordinate)) {
-            board[yCoordinate][xCoordinate] = BOARD_SYMBOL_DISCOVERED;
-            coordinates.push(new Point(xCoordinate, yCoordinate));
-        } else {
-            isNumberOfSurroundingMinesSet(yCoordinate, xCoordinate);
-        }
-    }
-
-    // not this
     private void addFlag(int yCoordinate, int xCoordinate) {
         board[yCoordinate][xCoordinate] = BOARD_SYMBOL_FLAG;
         numberOfFlagsPlaced++;
     }
 
-    // not this
     private void removeFlag(int yCoordinate, int xCoordinate) {
         board[yCoordinate][xCoordinate] = BOARD_SYMBOL_UNDISCOVERED;
         if (isMineMarked(yCoordinate, xCoordinate)) {
@@ -139,7 +145,18 @@ public class Minesweeper {
         numberOfFlagsPlaced--;
     }
 
-    // write for this
+    private void openSurroundingGrid(Deque<Point> coordinates, int yPosition, int xPosition) {
+        for (int vertical = yPosition - 1; vertical <= yPosition + 1; vertical++) {
+            if (MinesweeperUtils.isCoordinateInRange(vertical)) {
+                for (int horizontal = xPosition - 1; horizontal <= xPosition + 1; horizontal++) {
+                    if (MinesweeperUtils.isCoordinateInRange(horizontal) && isValid(vertical, horizontal)) {
+                        openGrid(coordinates, vertical, horizontal);
+                    }
+                }
+            }
+        }
+    }
+
     int checkSurrounding(int horizontal, int vertical) {
         int counter = 0;
         for (int i = horizontal - 1; i <= horizontal + 1; i++) {
@@ -154,28 +171,32 @@ public class Minesweeper {
         return counter;
     }
 
-    // did unit test for this already
-    // redo this for unit test and maybe rename the method
     public boolean isCoordinatesSet(String coordinates) {
         if (!MinesweeperUtils.isArgumentsEqualToThree(coordinates)) {
             System.out.println("Please provide two coordinates and an action");
             return false;
         }
 
-        String stringYCoordinate = MinesweeperHelpers.getInputFromIndex(coordinates, Y_COORDINATE_INDEX);
-        String stringXCoordinate = MinesweeperHelpers.getInputFromIndex(coordinates, X_COORDINATE_INDEX);
-        String action = MinesweeperHelpers.getInputFromIndex(coordinates, ACTION_COORDINATE_INDEX);
+        String stringYCoordinate = MinesweeperUtils.getInputFromIndex(coordinates, Y_COORDINATE_INDEX);
+        String stringXCoordinate = MinesweeperUtils.getInputFromIndex(coordinates, X_COORDINATE_INDEX);
+        String action = MinesweeperUtils.getInputFromIndex(coordinates, ACTION_COORDINATE_INDEX);
 
         int yCoordinate = MinesweeperUtils.getCoordinate(stringYCoordinate);
-        if (!MinesweeperHelpers.isCoordinateValid(yCoordinate)) {
+        if (!MinesweeperUtils.isCoordinateValid(yCoordinate)) {
+            System.out.println("Please input a positive integer in the range of " + GRID);
             return false;
         }
 
         int xCoordinate = MinesweeperUtils.getCoordinate(stringXCoordinate);
-        if (!MinesweeperHelpers.isCoordinateValid(xCoordinate)) {
+        if (!MinesweeperUtils.isCoordinateValid(xCoordinate)) {
+            System.out.println("Please input a positive integer in the range of " + GRID);
             return false;
         }
 
+        return isActionValid(action, yCoordinate, xCoordinate);
+    }
+
+    private boolean isActionValid(String action, int yCoordinate, int xCoordinate) {
         switch (action) {
             case "free" -> {
                 return isFloodFilled(yCoordinate, xCoordinate);
@@ -190,7 +211,6 @@ public class Minesweeper {
         }
     }
 
-    // test this
     public boolean isNotANeighbouringMine(int yCoordinate, int xCoordinate) {
         if (MinesweeperUtils.isDigit(board, yCoordinate, xCoordinate)) {
             System.out.println("There is a number here!");
@@ -200,21 +220,27 @@ public class Minesweeper {
         return true;
     }
 
-    // not sure how to test this but can try
-    public boolean isGameNotOver() {
+    public boolean isGameOver() {
         correctlyPlacedMines = 0;
+        numberOfUndiscoveredIndex = 0;
+
         for (int i = 0; i < GRID; i++) {
             for (int j = 0; j < GRID; j++) {
-                if (board[i][j] == '*' && isMineMarked(i, j)) {
+                if (board[i][j] == BOARD_SYMBOL_MINE) {
+                    isPlayerWon = false;
+                    return true;
+                } else if (board[i][j] == BOARD_SYMBOL_UNDISCOVERED) {
+                    numberOfUndiscoveredIndex++;
+                } else if (board[i][j] == BOARD_SYMBOL_FLAG && isMineMarked(i, j)) {
                     correctlyPlacedMines++;
                 }
             }
         }
 
-        return !(correctlyPlacedMines == numberOfFlagsPlaced && correctlyPlacedMines == numberOfMines);
+        return (correctlyPlacedMines == numberOfFlagsPlaced && correctlyPlacedMines == numberOfMines)
+                || (numberOfUndiscoveredIndex == numberOfMines);
     }
 
-    // Unit test this already
     boolean isMineMarked(int yCoordinate, int xCoordinate) {
         if (coordinates.containsKey(yCoordinate)) {
             return coordinates.get(yCoordinate).contains(xCoordinate);
@@ -222,10 +248,8 @@ public class Minesweeper {
         return false;
     }
 
-    // Unit test this already
-    // Unit test this already
     boolean isFlagPlaced(int yCoordinate, int xCoordinate) {
-        if (isNotANeighbouringMine(yCoordinate, xCoordinate)) {
+        if (isNotANeighbouringMine(yCoordinate, xCoordinate) && isNotDiscovered(yCoordinate, xCoordinate)) {
             if (board[yCoordinate][xCoordinate] == BOARD_SYMBOL_UNDISCOVERED) {
                 addFlag(yCoordinate, xCoordinate);
             } else {
@@ -236,13 +260,20 @@ public class Minesweeper {
         return false;
     }
 
-    // do unit test for this
+    private boolean isNotDiscovered(int yCoordinate, int xCoordinate) {
+        if (board[yCoordinate][xCoordinate] == BOARD_SYMBOL_DISCOVERED) {
+            System.out.println("This place has already been discovered");
+            return false;
+        }
+        return true;
+    }
+
     boolean isFloodFilled(int yCoordinate, int xCoordinate) {
         Deque<Point> coordinates = new ArrayDeque<>();
 
         if (isMineMarked(yCoordinate, xCoordinate)) {
-            // reveal all the mines here
-            return false;
+            revealAllMines();
+            return true;
         }
 
         if (isNumberOfSurroundingMinesSet(yCoordinate, xCoordinate)) {
@@ -257,26 +288,11 @@ public class Minesweeper {
             int yPosition = coordinate.y;
             int xPosition = coordinate.x;
 
-            if (isValid(yPosition + 1, xPosition)) {
-                openGrid(coordinates, yPosition + 1, xPosition);
-            }
-
-            if (isValid(yPosition - 1, xPosition)) {
-                openGrid(coordinates, yPosition - 1, xPosition);
-            }
-
-            if (isValid(yPosition, xPosition + 1)) {
-                openGrid(coordinates, yPosition, xPosition + 1);
-            }
-
-            if (isValid(yPosition, xPosition - 1)) {
-                openGrid(coordinates, yPosition, xPosition - 1);
-            }
+            openSurroundingGrid(coordinates, yPosition, xPosition);
         }
         return true;
     }
 
-    // unit test this
     private boolean isNumberOfSurroundingMinesSet(int horizontal, int vertical) {
         int numberOfSurroundingMines;
         numberOfSurroundingMines = checkSurrounding(horizontal, vertical);
@@ -287,14 +303,11 @@ public class Minesweeper {
         return false;
     }
 
-    // unit test this
     boolean isValid(int yCoordinate, int xCoordinate) {
-        if (MinesweeperUtils.isInRange(yCoordinate) || MinesweeperUtils.isInRange(xCoordinate)
-                || board[yCoordinate][xCoordinate] == BOARD_SYMBOL_DISCOVERED
-                || MinesweeperUtils.isDigit(board, yCoordinate, xCoordinate)
-                || isMineMarked(yCoordinate, xCoordinate)) {
-            return false;
-        }
-        return true;
+        return !MinesweeperUtils.isInRange(yCoordinate) &&
+                !MinesweeperUtils.isInRange(xCoordinate) &&
+                !MinesweeperUtils.isDigit(board, yCoordinate, xCoordinate) &&
+                !isMineMarked(yCoordinate, xCoordinate) &&
+                board[yCoordinate][xCoordinate] != BOARD_SYMBOL_DISCOVERED;
     }
 }

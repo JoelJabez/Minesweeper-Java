@@ -2,7 +2,9 @@ package minesweeper.game;
 
 import junit.framework.TestCase;
 
-public class MinesweeperUtilsTest extends TestCase{
+import static org.junit.Assert.assertNotEquals;
+
+public class MinesweeperUtilsTest extends TestCase {
     private final int NEGATIVE_INFINITY = (int) Double.NEGATIVE_INFINITY;
 
     public void testGetIntegerFromUserInput() {
@@ -63,5 +65,31 @@ public class MinesweeperUtilsTest extends TestCase{
 
         assertFalse(MinesweeperUtils.isArgumentsEqualToThree("1    2   "));
     }
-}
 
+    public void testSplitArguments() {
+        assertEquals(1, MinesweeperUtils.splitArguments("1 ").length);
+        assertEquals(2, MinesweeperUtils.splitArguments("1 2").length);
+        assertEquals(3, MinesweeperUtils.splitArguments("foo   bar    baz").length);
+
+        assertNotEquals(3, MinesweeperUtils.splitArguments("1   2").length);
+    }
+
+    public void testGetInputFromIndex() {
+        assertEquals("1", MinesweeperUtils.getInputFromIndex("1      5    foo", 0));
+        assertEquals("test", MinesweeperUtils.getInputFromIndex("1 TeSt foo", 1));
+        assertEquals("foo", MinesweeperUtils.getInputFromIndex("1 TeSt FOO", 2));
+
+        assertNotEquals("TeSt", MinesweeperUtils.getInputFromIndex("1 TeSt foo", 1));
+        assertNotEquals("FOO", MinesweeperUtils.getInputFromIndex("1 TeSt FOO", 2));
+    }
+
+    public void testIsCoordinateValid() {
+        assertTrue(MinesweeperUtils.isCoordinateInRange(0));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(5));
+        assertTrue(MinesweeperUtils.isCoordinateInRange(8));
+
+        assertFalse(MinesweeperUtils.isCoordinateInRange(-1));
+        assertFalse(MinesweeperUtils.isCoordinateInRange(9));
+        assertFalse(MinesweeperUtils.isCoordinateInRange((int) Double.NEGATIVE_INFINITY));
+    }
+}

@@ -18,12 +18,10 @@ public class Main {
         do {
             setFlagMineFromUser(minesweeper, scanner);
             minesweeper.printBoard();
-            isGameNotOver = minesweeper.isGameNotOver();
-        } while (isGameNotOver);
+            isGameNotOver = minesweeper.isGameOver();
+        } while (!isGameNotOver);
 
-        minesweeper.printBoard();
-
-        System.out.println("Congratulations! You found all the mines!");
+        minesweeper.printMessage();
         scanner.close();
     }
 

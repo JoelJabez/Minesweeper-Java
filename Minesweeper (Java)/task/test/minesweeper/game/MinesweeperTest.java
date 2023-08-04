@@ -17,7 +17,6 @@ public class MinesweeperTest extends TestCase {
 
     void generateBoard() {
         placeMines();
-        minesweeper.placeCounterOfSurroundingMines();
     }
 
     void placeMines() {
@@ -29,7 +28,7 @@ public class MinesweeperTest extends TestCase {
             int xCoordinate = i;
             int yCoordinate = i;
 
-            if (minesweeper.isMineMarked(yCoordinate, xCoordinate)) {
+            if (!minesweeper.isMineMarked(yCoordinate, xCoordinate)) {
                 minesweeper.coordinates.putIfAbsent(xCoordinate, yCoordinates);
                 minesweeper.coordinates.get(xCoordinate).add(yCoordinate);
 
@@ -73,7 +72,6 @@ public class MinesweeperTest extends TestCase {
 
     public void testIsNotMarked() {
         generateBoard();
-        assertTrue(minesweeper.isMineMarked(1, 0));
+        assertFalse(minesweeper.isMineMarked(1, 0));
     }
-
 }
